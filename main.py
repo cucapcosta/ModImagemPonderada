@@ -5,7 +5,7 @@ import random
 import imutils
 
 st.set_page_config(page_title="Ponderada Periquito", layout="centered")
-st.title("Ultra modificador de Imagens Periquito 0.4")
+st.title("Ultra modificador de Imagens Periquito 1.0")
 def apply_filter(img, tag):
     if tag == "Cinza":
         return cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -90,8 +90,8 @@ if uploaded_file is not None:
             st.session_state["mod"] = imutils.rotate_bound(st.session_state["mod"], st.session_state["rotacao"])
             st.rerun()
     st.text("*Não recomendado rotacionar fora de multiplos de 90 graus várias vezes seguidas")
-    if st.button("Download", use_container_width=True):
-        file_bytes = cv2.imencode(".png", st.session_state["mod"])[1].tobytes()
-        st.download_button(label="Baixar imagem", data=file_bytes, file_name="imagem_modificada.png", mime="image/png")
+    file_bytes = cv2.cvtColor(st.session_state["mod"], cv2.COLOR_RGB2BGR)
+    file_bytes = cv2.imencode(".png", file_bytes)[1].tobytes()
+    st.download_button(label="Baixar imagem", data=file_bytes, file_name="imagem_modificada.png", mime="image/png")
 else:
     st.info("Não fode mlk, upa imagem")
