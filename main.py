@@ -5,7 +5,9 @@ import random
 import imutils
 
 st.set_page_config(page_title="Ponderada Periquito", layout="centered")
-st.title("Ultra modificador de Imagens Periquito 1.0")
+st.title("Ultra modificador de Imagens Periquito 1.1")
+# Filtros dos botões: Não se aplica ao redimencionamento e rotação.
+# Provavelmente porque fiz em dois dias diferentes e fiquei com preguiça de seguir o padrão
 def apply_filter(img, tag):
     if tag == "Cinza":
         return cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -38,6 +40,7 @@ def apply_filter(img, tag):
 uploaded_file = st.file_uploader("Upar imagem", type=["png", "jpg", "jpeg", "webp"])
 if uploaded_file is not None:
     raw = uploaded_file.read()
+    # Transformando a imagem em RGB, quem que em sã consciência usa BGR?
     img_brg = cv2.imdecode(np.frombuffer(raw, np.uint8), cv2.IMREAD_COLOR)
     img_rgb = cv2.cvtColor(img_brg, cv2.COLOR_BGR2RGB)
     if st.session_state.get("raw") != raw:
@@ -66,7 +69,8 @@ if uploaded_file is not None:
                 if(tag == "Cinza" or tag == "Bordas"):
                     st.session_state['Cinza'] = True
                 st.rerun()
-    
+    # Slider de redimencionamento
+    #Ficou meio torto mas front não é fácil
     left, right = st.columns([1,1], gap="small")
     with left:
         st.slider("Ajuste de tamanho", 0,4096, 1024, 1, key="slider")
@@ -76,11 +80,14 @@ if uploaded_file is not None:
             sizey = int(sizex/st.session_state["mod"].shape[1] * st.session_state["mod"].shape[0])
             st.session_state["mod"] = cv2.resize(st.session_state["mod"], (sizex, sizey))
             st.rerun()
+    # Display das imagens
+    # Honestamente eu não sei se seria possível manter as duas imagens nas colunas iguais as de cima, mas preferi separar para garantir
     left, right = st.columns([1, 1])
     with left:
         st.image(img_rgb, use_container_width=True, caption="Imagem Original")
     with right:
         st.image(st.session_state['mod'], use_container_width=True, caption="Imagem Modificada")
+    #Sim, tem muitas dessas separações de colunas. Eu também não estou feliz com isso, mas postergar é complicado
     left, right = st.columns([1, 1])
     with left:
         st.number_input("Rotação", 0, 360, 0, 1, key="rotacao")
@@ -89,9 +96,14 @@ if uploaded_file is not None:
         if st.button("Rotacionar"):
             st.session_state["mod"] = imutils.rotate_bound(st.session_state["mod"], st.session_state["rotacao"])
             st.rerun()
+    # Girar a imagem fora dos múltiplos de 90 graus faz a imagem ser constantemente "reduzida", mesmo que a imagem em sí esteja aumentando.
+    # Como o sistema tenta encaixar a imagem, girando 45 graus por exemplo resulta no tamanho da imagem aumentando, chegando no ponto em que o sistema pode se recusar a realizar operações por ter pixels demais.
     st.text("*Não recomendado rotacionar fora de multiplos de 90 graus várias vezes seguidas")
     file_bytes = cv2.cvtColor(st.session_state["mod"], cv2.COLOR_RGB2BGR)
     file_bytes = cv2.imencode(".png", file_bytes)[1].tobytes()
     st.download_button(label="Baixar imagem", data=file_bytes, file_name="imagem_modificada.png", mime="image/png")
 else:
-    st.info("Não fode mlk, upa imagem")
+    # Você não acreditaria o que tinha aqui durante o desenvolvimento :skull:
+    # Emoji n funciona mas o importante é a intenção
+    st.info("Por favor, faça o upload de uma imagem para começar.")
+    st.text("Desenvolvido pelo Periquito, com amor, carinho, pressa, um toque de procrastinação e muita cafeína")
