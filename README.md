@@ -23,6 +23,7 @@ E
 cv2.Canny(img, 100, 200)
 ```
 &emsp;... Mudam o formato da matriz de cores, que podem causar erros ao usar filtros como psicodélico ou tentar aplicar grey scale novamente.
+<br>
 &emsp;Também houveram questões a serem resolvidas, como efeitos resultantes de resizing, problemas na rotação (que, fora em rotações de múltiplos de 90 graus, não foram completamente resolvidos) e a questão do openCV utilizar BGR ao invés de RGB por padrão, que causou resultados interessantes na hora de baixar o arquivo.
 
 ## Vídeo
