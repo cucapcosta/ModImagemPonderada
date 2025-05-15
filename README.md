@@ -31,9 +31,11 @@ https://drive.google.com/file/d/1zFtzdINKVZx99ntuO4X3jJC38E_r_qOY/view?usp=shari
 
 ## Como rodar
 
+&emsp;Rode no terminal (bash do Arch foi utilizado, mas não deve haver diferenças):
+**Requer Python (3.13 utilizado), pip e git instalados.**
 ```bash
-git clone {repo}
-cd {repo}
+git clone git@github.com:cucapcosta/ModImagemPonderada.git
+cd ModImagemPonderada
 pip install -r requirements.txt
 streamlit run main.py
 ```
