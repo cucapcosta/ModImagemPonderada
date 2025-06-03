@@ -10,7 +10,9 @@ st.title("Ultra modificador de Imagens Periquito 1.1")
 # Provavelmente porque fiz em dois dias diferentes e fiquei com preguiça de seguir o padrão
 def apply_filter(img, tag):
     if tag == "Cinza":
-        return cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        # The image is stored in RGB format, so convert from RGB to grayscale
+        # rather than BGR to avoid color channel mixup
+        return cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
     elif tag == "Inversão":
         return cv2.bitwise_not(img)
     elif tag == "Contraste":
